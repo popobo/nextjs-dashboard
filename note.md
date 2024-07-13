@@ -92,3 +92,73 @@ function NavBar() {
 当用户点击这些链接时，页面切换是在客户端完成的，不会触发完整的页面刷新。
 
 需要注意的是，虽然client-side navigation提供了许多优势，但也带来了一些挑战，比如SEO考虑、初始加载时间可能较长等。因此，在使用时需要权衡利弊，并采取适当的优化策略。
+
+## neondatabase/serverless
+是的，我了解 `@neondatabase/serverless` 这个库。这是一个专门为 Neon 数据库设计的 PostgreSQL 客户端库，针对无服务器环境进行了优化。让我为你简要介绍一下：
+
+1. 特点：
+   - 专为 Neon 数据库设计，但也兼容标准 PostgreSQL
+   - 针对无服务器环境优化，支持快速连接
+   - 支持连接池
+   - 提供与 `pg` 库相似的 API，易于使用
+
+2. 使用方法：
+   首先需要安装：
+   ```
+   pnpm add @neondatabase/serverless
+   ```
+
+   基本使用示例：
+   ```typescript
+   import { Pool } from '@neondatabase/serverless';
+
+   const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+
+   async function query() {
+     const client = await pool.connect();
+     try {
+       const result = await client.query('SELECT * FROM users');
+       console.log(result.rows);
+     } finally {
+       client.release();
+     }
+   }
+   ```
+
+3. 与标准 `pg` 库的主要区别：
+   - 更快的连接速度
+   - 更适合无服务器环境
+   - 部分 API 可能略有不同
+
+4. 注意事项：
+   - 主要用于 Neon 数据库，但也可用于其他 PostgreSQL 数据库
+   - 在无服务器环境中特别有用，如 Vercel Serverless Functions
+
+如果你正在使用 Neon 数据库或者在无服务器环境中使用 PostgreSQL，使用这个库可能会带来性能上的优势。你可能需要稍微调整一下之前的代码来适配这个库。需要我帮你修改之前的代码以使用 `@neondatabase/serverless` 吗？
+
+## 无服务器环境
+
+"无服务器环境"（Serverless Environment）是一种云计算执行模型，它有以下特点：
+
+1. 无需管理服务器：开发者不需要直接管理服务器硬件或操作系统。
+
+2. 按需执行：代码只在需要时才运行，不需要持续运行的服务器。
+
+3. 自动扩展：根据需求自动扩展或缩小资源，无需手动配置。
+
+4. 按使用付费：只为实际执行的代码付费，而不是为持续运行的服务器付费。
+
+5. 短暂的执行环境：每次函数调用都在一个新的、临时的环境中执行。
+
+6. 冷启动：首次调用可能需要额外时间来初始化环境。
+
+在前端开发中，常见的无服务器环境包括：
+
+- Vercel Serverless Functions
+- AWS Lambda
+- Google Cloud Functions
+- Azure Functions
+
+这些环境适合处理短暂的、事件驱动的任务，如 API 请求、数据处理等。对于数据库连接，无服务器环境要求快速建立和释放连接，这就是为什么像 `@neondatabase/serverless` 这样的库会特别优化连接速度。
+
+使用无服务器模型可以简化部署和扩展，但也需要考虑其特有的挑战，如冷启动延迟和执行时间限制。
