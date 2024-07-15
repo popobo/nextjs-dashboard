@@ -1,4 +1,4 @@
-## Tailwind antialiased是什么
+## Tailwind antialiased 是什么
 
 `antialiased` 是 Tailwind CSS 提供的一个工具类，用于改善文本渲染效果。具体来说：
 
@@ -43,9 +43,9 @@
 
 ## client-side navigation 是什么意思
 
-Client-side navigation 是指在单页应用(SPA)中，页面间的导航由客户端 JavaScript 处理，而不是通过传统的服务器请求-响应方式来加载新页面。这是现代前端框架如React、Vue、Angular等的一个核心特性，在Next.js中也被广泛使用。
+Client-side navigation 是指在单页应用(SPA)中，页面间的导航由客户端 JavaScript 处理，而不是通过传统的服务器请求-响应方式来加载新页面。这是现代前端框架如 React、Vue、Angular 等的一个核心特性，在 Next.js 中也被广泛使用。
 
-以下是client-side navigation的主要特点：
+以下是 client-side navigation 的主要特点：
 
 1. 更快的页面切换：
 
@@ -60,24 +60,24 @@ Client-side navigation 是指在单页应用(SPA)中，页面间的导航由客�
 3. 减少服务器负载：
 
    - 减少了对服务器的请求次数。
-   - 只需要获取新页面所需的数据，而不是整个HTML文档。
+   - 只需要获取新页面所需的数据，而不是整个 HTML 文档。
 
 4. 改善用户体验：
 
    - 可以实现平滑的过渡效果。
    - 提供类似原生应用的体验。
 
-5. 动态更新URL：
+5. 动态更新 URL：
 
-   - 使用History API来更新浏览器URL，而不触发页面刷新。
+   - 使用 History API 来更新浏览器 URL，而不触发页面刷新。
 
 6. 预加载：
    - 可以预先加载可能会访问的页面资源，进一步提升速度。
 
-在Next.js中，默认情况下，`<Link>` 组件就使用了client-side navigation。例如：
+在 Next.js 中，默认情况下，`<Link>` 组件就使用了 client-side navigation。例如：
 
 ```jsx
-import Link from 'next/link';
+import Link from "next/link";
 
 function NavBar() {
   return (
@@ -91,12 +91,14 @@ function NavBar() {
 
 当用户点击这些链接时，页面切换是在客户端完成的，不会触发完整的页面刷新。
 
-需要注意的是，虽然client-side navigation提供了许多优势，但也带来了一些挑战，比如SEO考虑、初始加载时间可能较长等。因此，在使用时需要权衡利弊，并采取适当的优化策略。
+需要注意的是，虽然 client-side navigation 提供了许多优势，但也带来了一些挑战，比如 SEO 考虑、初始加载时间可能较长等。因此，在使用时需要权衡利弊，并采取适当的优化策略。
 
 ## neondatabase/serverless
+
 是的，我了解 `@neondatabase/serverless` 这个库。这是一个专门为 Neon 数据库设计的 PostgreSQL 客户端库，针对无服务器环境进行了优化。让我为你简要介绍一下：
 
 1. 特点：
+
    - 专为 Neon 数据库设计，但也兼容标准 PostgreSQL
    - 针对无服务器环境优化，支持快速连接
    - 支持连接池
@@ -104,20 +106,22 @@ function NavBar() {
 
 2. 使用方法：
    首先需要安装：
+
    ```
    pnpm add @neondatabase/serverless
    ```
 
    基本使用示例：
+
    ```typescript
-   import { Pool } from '@neondatabase/serverless';
+   import { Pool } from "@neondatabase/serverless";
 
    const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 
    async function query() {
      const client = await pool.connect();
      try {
-       const result = await client.query('SELECT * FROM users');
+       const result = await client.query("SELECT * FROM users");
        console.log(result.rows);
      } finally {
        client.release();
@@ -126,6 +130,7 @@ function NavBar() {
    ```
 
 3. 与标准 `pg` 库的主要区别：
+
    - 更快的连接速度
    - 更适合无服务器环境
    - 部分 API 可能略有不同
@@ -162,3 +167,41 @@ function NavBar() {
 这些环境适合处理短暂的、事件驱动的任务，如 API 请求、数据处理等。对于数据库连接，无服务器环境要求快速建立和释放连接，这就是为什么像 `@neondatabase/serverless` 这样的库会特别优化连接速度。
 
 使用无服务器模型可以简化部署和扩展，但也需要考虑其特有的挑战，如冷启动延迟和执行时间限制。
+
+## 如何理解
+
+When to use the useSearchParams() hook vs. the searchParams prop?
+
+You might have noticed you used two different ways to extract search params. Whether you use one or the other depends on whether you're working on the client or the server.
+
+<Search> is a Client Component, so you used the useSearchParams() hook to access the params from the client.
+
+<Table> is a Server Component that fetches its own data, so you can pass the searchParams prop from the page to the component. As a general rule, if you want to read the params from the client, use the useSearchParams() hook as this avoids having to go back to the server.
+
+这段话主要解释了在 Next.js 中获取 URL 查询参数（search params）的两种方法，以及它们的使用场景。让我来解释一下：
+
+1. 两种获取查询参数的方法：
+
+   - `useSearchParams()` 钩子
+   - `searchParams` 属性
+
+2. 使用场景：
+
+   - 客户端组件（Client Component）：使用 `useSearchParams()` 钩子
+   - 服务器端组件（Server Component）：使用 `searchParams` 属性
+
+3. 示例：
+
+   - `<Search>` 是客户端组件，所以使用 `useSearchParams()` 钩子
+   - `<Table>` 是服务器端组件，可以直接从页面组件传递 `searchParams` 属性
+
+4. 一般规则：
+
+   - 如果你想在客户端读取参数，使用 `useSearchParams()` 钩子
+   - 这样可以避免再次向服务器发送请求
+
+5. 原因：
+   - 客户端使用 `useSearchParams()` 可以直接从浏览器 URL 中获取参数，无需服务器交互
+   - 服务器端组件已经在服务器上运行，可以直接访问 `searchParams`，无需额外的客户端逻辑
+
+这种方法的优势在于它根据组件的运行环境（客户端或服务器端）选择最优的参数获取方式，从而提高应用性能和响应速度。
